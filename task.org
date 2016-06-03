@@ -1,0 +1,14 @@
+* "Hack"
+** Use features
+** Polybase
+** R predictive analytics
+** Any other features to create a dashboard to utilize PowerBI and
+** Explore geographical or temporal trends in the PASS-provided "Discovery Data"
+* Questions for exploration
+** From how far away do attendees travel to SQL Saturday?
+** Are there any geographic trends to the distances travelled?
+** Does the SQL Saturday session data provide any insight into what sessions are chosen for Summit?
+** Are there any trends in session or topic content that can be established?
+** Are there any geographical insights that can be discerned?
+** Do the sessions presented at SQL Saturday help predict popularity or selection of sessions at Summit?
+** Does virtual chapter member data provide any insights into PASS membership growth?

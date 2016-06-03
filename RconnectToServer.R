@@ -31,3 +31,16 @@ summary(df)
 ##  Mean   : 500.5  
 ##  3rd Qu.: 750.2  
 ##  Max.   :1000.0=
+
+
+sqlQuery<- "SELECT TOP 1000 [SQLSatRegistrations].[UserGUID] as [UserGUID1], [SQLSatRegistrations].[EventName], RIGHT(SQLSatRegistrations.EventName,4) AS year, [SQLSatRegistrations].[City] AS EventCity, [SQLSatRegistrations].[Country] AS EventCountry, [PASSmemberswithgeolocation].[UserGUID], [PASSmemberswithgeolocation].[City] AS MemCity, [PASSmemberswithgeolocation].[Country] AS MemCountry
+FROM [dbo].['SQLSat Registrations$'] AS SQLSatRegistrations
+LEFT JOIN [dbo].['PASS members with geolocation$'] AS PASSmemberswithgeolocation
+ON SQLSatRegistrations.UserGUID=PASSmemberswithgeolocation.UserGUID;"
+
+
+
+conn <- odbcDriverConnect(connectionString)
+df <- sqlQuery(conn, sqlQuery)
+close(conn) # don't leak connections !
+df

@@ -12,10 +12,10 @@ connectionString <- paste0(
   ";Uid=", myUser, 
   ";Pwd=", myPassword)
 # This query simulates a table by generating a rowset with one integer column going from 1 to 1000
-sqlQuery <- "
-WITH nb AS (SELECT 0 AS n UNION ALL SELECT n+1 FROM nb where n < 9)
-SELECT n1.n+10*n2.n+100*n3.n+1 FROM nb n1 CROSS JOIN nb n2 CROSS JOIN nb n3
-"
+sqlQuery <- "show tables;"
+
+#WITH nb AS (SELECT 0 AS n UNION ALL SELECT n+1 FROM nb where n < 9) SELECT n1.n+10*n2.n+100*n3.n+1 FROM nb n1 CROSS JOIN nb n2 CROSS JOIN nb n3"
+
 conn <- odbcDriverConnect(connectionString)
 df <- sqlQuery(conn, sqlQuery)
 close(conn) # don't leak connections !

@@ -1,0 +1,144 @@
+MS SQL Server 2016 Launch event <2016-06-03 Fri>
+* Morning Session <2016-06-03 Fri 09:00>
+
+TCO for database with BI and analytics (R) $3.7M <- Chunk of change
+
+
+The Microsoft Data Platform (are they Hortonworks/Cloudera now?)
+
+* Capture+Manage
+Hadoop/SQL/etc
+* Visualise+Decide
+Publishing dashboards across the org.
+* Transform+Analyze
+R + in-memory (since MS invested big in that ecosystem)
+
+All of this is built in to SQL Server 2016.
+
+* SQL Server, Azure VMs, SQL Database - Variations
+** SQL Server on physical machines
+** SQL Server on on-prem VMs (private cloud)
+** SQL Server in Azure VMs (public cloud)
+** SQL Database (public cloud)
+
+* Always encrypted
+At rest, in motion. On-prem, in cloud. With application transparency.
+
+** Seems to be encrypted columns: neat!
+
+I was right: CEK (column encryption key)
+
+So the client encrypts the name and fields in the select query, the encrypted rows are returned, and the client can decrypt them.  
+
+We need to use deterministic encryption to allow comparisons (==)
+
+We don't trust the database, and it's transparent to the user!
+
+(We could probably implement this ourselves)
+
+** Row level security
+
+Arbitrary queries can be used to define restricted rows: encryption(?) is handled transparently.
+
+** Dynamic Data Masking
+
+ALTER TABLE employees ALTER COLUMN salary ADD MASKED WITH FUNCTION(whateveritwas);
+UNMASK privileges for asdflij
+
+For all of this stuff, encryption is fully- and hardware- optimised, including parallelising decryption for performance.
+
+* JSON
+FOR JSON PATH allows you to get json out of your SQL query
+Support in DocumentDB (whatever that is)
+
+* Polybase for SQL Server 2016
+(RDBMS)<------ PolyBase ------>(Hadoop)
+
+Do ETL with Hadoop, then use PolyBase to load into Data WareHouse
+
+Step 1: Set up a Hadoop Cluster: Hortonworks or Cloudera, 2.0+
+(alternatively) Set up an Azure Storage blob
+Step 2: Install SQL Server
+Step 3: Configure a PolyBase group (CTP3): Head Node and Compute Nodes
+Step 4: Choose a Hadoop Flavour: Hrtnwrks 2.x, Cloudera 5.x
+Step 5: Attach Hadoop Cluster or Azure Storage
+
+Then we can submit queries to PolyBase and PolyBase talks to the cluster. We can "pause" our compute nodes to avoid paying extra and the DBA can dynamically adjust number of compute nodes.
+
+Hadoop clusters can be shared between different polybase nodes.
+
+PolyBase seems a lot like MicroSoft Hive in terms of relating SQL to HDFS via MapReduce.
+
+Their Summary: Query relational and non-relational data with T-SQL
+
+* SSIS improvements for SQL Server 2k16
+AlwaysOn support (HA), incremental deployment of packages, custom log level, improved proj upgrade support
+
+Custom Authentication - now supports non-AD users, not just windows auth
+
+Tabular Models have improved
+* Master Data Services
+
+* Mobile BI apps for SQL Server
+Datazen allows mobile access and publishing(?)
+
+* Modern Reports
+MicroSoft Rmd!
+
+* The big news is Revolution R Enterprise
+We can monitor and manage R runtime usage
+On prem Integration with PowerBI
+
+R variables bind to SQL by name (we can embed the SQL queries in R)
+
+* Final bit: upgrade workflow today
+Wave of SQL2k5 upgrades coming as it reaches EOL.
+There is an Upgrade Advisor Analysis Wizard available.
+(n.b. as software agents get smarter, maybe we should standardise that *or implies robot, *er implies human: the docter will see you now, the doctor lives in the cloud)
+
+* Session 2 <2016-06-03 Fri 11:00>
+David <Someone>
+Data Platform Consultant for Quorum in Edinburgh
+Certified Technical Trainer
+
+MS develops SQL: Cloud-first but not Cloud-only
+Physical->Virtual->Infrastructure->P(latform)aaS
+
+What's new: 
+** Query Store 
+Stores history of queries, execution plans, and runtime stats ("It's a biggie") with a GUI
+** Temporal Tables
+System-versioned table, any changes make their way through with no effort by you.
+"Show me this row at any point in time" (or BETWEEN two points with the keyword)
+This is relying on "storage is dirt cheap" (no magic)
+
+** Stretch Database
+Per table archiving rows into PaaS service Azure SQL v12 Database
+250GB ~92GBP/month\
+Blur the line between on prem and cloud
+
+** Availability groups
+Load-balancing of read-intent connection requests is now support across a set of read-only replicas
+
+** Azure Secondaries (who he?)
+You can now have readable secondaries when using PaaS under any tier (allowing read-only workloads to be distributed further)
+Azure Active Directory can manage access to both primary and all secondary databases (no credential mgmt in DBs at all!)
+
+** T-SQL Extras
+NO_PERFORMANCE_SPOOL
+TRUNCATE TABLE WITH PARTITIONS
+
+** JSON Support (FOR JSON like FOR XML), Backup to Azure using block blobs, tempdb auto-provisioned files, Option in install for setting up Instant File Initialisation
+
+
+** PaaS Database goes up to eleven: P11 tire has 1750 DTU
+DTU = f(CPU, memory, reads, writes)
+
+** Springer's final thought
+"If you're going to learn one feature - Query Store"
+
+SELECT * FROM STRING_SPLIT('tom dick harry',' ')
+
+tom
+dick
+harry
